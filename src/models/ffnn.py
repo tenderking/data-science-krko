@@ -1,10 +1,9 @@
 from tensorflow.data import Dataset, AUTOTUNE  # type: ignore
 
 from keras._tf_keras.keras.models import Sequential
-from keras._tf_keras.keras.layers import Dense
+from keras._tf_keras.keras.layers import Dense, Input
 from keras._tf_keras.keras.optimizers import SGD
 from keras._tf_keras.keras.losses import SparseCategoricalCrossentropy, MeanSquaredError
-from keras._tf_keras.keras import Input
 from keras._tf_keras.keras.regularizers import l2
 from keras._tf_keras.keras.callbacks import EarlyStopping
 

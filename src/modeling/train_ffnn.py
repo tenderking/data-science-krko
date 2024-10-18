@@ -16,7 +16,7 @@ from src.config import (
     data_path,
 )
 from src.models.ffnn import FFNN_tensorflow
-from src.plots import plot_accuracy_vs_regularization, plot_confusion_matrix
+from src.plots import plot_scatterplot, plot_confusion_matrix
 
 wandb.login()  # Login to your WandB account
 
@@ -104,6 +104,20 @@ def train_and_evaluate(hidden_layer, learning_rate_i):
             "learning_rate": learning_rate_i,
         }
     )
+    print("history", history.history)
+    model.model.summary()
+    # Plot accuracy vs epoch
+    plot_scatterplot(
+        range(len(history.history["accuracy"])),  # Use range() to get epoch numbers
+        "Epochs",
+        history.history["accuracy"],
+        "Accuracy",
+    )  # Use the history object for plotting
+    accuracy_vs_epoch_path = f"reports/figures/accuracy_vs_epoch_{str(hidden_layer).replace('(', '').replace(')', '').replace(', ', '_')}_{str(learning_rate_i).replace('.', '_')}.png"
+    plt.savefig(accuracy_vs_epoch_path)
+
+    # Log the plot to WandB
+    wandb.log({"accuracy_vs_epoch": wandb.Image(accuracy_vs_epoch_path)})
     wandb.finish()
     return test_accuracy, learning_rate_i, train_accuracy
 
@@ -137,23 +151,12 @@ if __name__ == "__main__":
         accuracy_values.append(test_accuracy)
         accuracy_values_train.append(train_accuracy)
 
-    if len(learning_rate_values) != len(accuracy_values_train) or len(
-        learning_rate_values
-    ) != len(accuracy_values):
-        print(f"Length of regularization_values: {len(learning_rate_values)}")
-        print(f"Length of accuracy_values_train: {len(accuracy_values_train)}")
-        print(f"Length of accuracy_values: {len(accuracy_values)}")
-    else:
-        # Plot accuracy vs regularization
-        plot_accuracy_vs_regularization(
-            lambda_values, accuracy_values_train, accuracy_values
-        )
-        accuracy_vs_learnng_rate_path = "reports/figures/accuracy_vs_learning_rate.png"
-        plt.savefig(accuracy_vs_learnng_rate_path)
-        wandb.init(project="my-awesome-project", group="my_experiment_group")
-
-        # Log the final plot to WandB
-        wandb.log(
-            {"accuracy_vs_learning_rate": wandb.Image(accuracy_vs_learnng_rate_path)}
-        )
-        wandb.finish()
+    # Save results to a CSV file
+    results = np.array([learning_rate_values, accuracy_values, accuracy_values_train])
+    results = results.T
+    np.savetxt(
+        "reports/results.csv",
+        results,
+        delimiter=",",
+        header="learning_rate_accuracy_accuracy_train",
+    )
