@@ -4,6 +4,10 @@
 This project is designed to train a machine learning model using the `uv` tool and monitor models using weights and biases (wand).
 To demontrate these tools, we look at King Rook and King data set and compared Fast Fourier Neural Network and RandomSearch algorithms such as xgboost, decision trees, and bagging. The goal is to see which metrics and evaluations can be used to compare these models. WandB provides model observability and the ability to create dashboards. UV tools is an alternative to pip and other python tools which so far has proven to provide a better developer experience.
 
+### Link to current dashboard on weights and biases
+
+[Dashboard](https://wandb.ai/tenderking/my-awesome-project/reports/FFNN-BEST-AND-WORST--Vmlldzo5NjgxNzkz)
+
 
 ## Project Structure
 ```
