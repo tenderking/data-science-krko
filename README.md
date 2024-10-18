@@ -1,4 +1,4 @@
-# Project KRKO
+# Data science monitoring and developer experience
 
 ## Overview
 This project is designed to train a machine learning model using the `uv` tool and monitor models using weights and biases (wand).
